@@ -53,6 +53,7 @@ bookHead.innerText = 'Book Recommendation';
 seeMoreBtn.innerText = 'See More';
 bookDetails.style.display = 'none';
 
+userName.setAttribute('placeholder', 'Enter your name');
 mainContent.setAttribute('id', 'main-content');
 h1.setAttribute('id', 'title');
 h2.setAttribute('id', 'welcome');
