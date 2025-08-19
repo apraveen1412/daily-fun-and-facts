@@ -131,6 +131,8 @@ body {
 /* Book Section */
 #book-div {
     text-align: center;
+    display: flex;
+    flex-direction: column;
 }
 #book-div img {
     width: 100%;
@@ -153,8 +155,9 @@ body {
     background-color: #444;
 }
 #book-div div {
-    margin-top: 0.5rem;
-    text-align: left;
-    font-size: 0.9rem;
-    color: #333;
+    width: 50%;
+    align-self: center;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    margin: 0.5rem 0;
 }
