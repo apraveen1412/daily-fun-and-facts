@@ -1,3 +1,4 @@
+//Creating elements using DOM
 let h1=document.createElement('h1');
 let h2=document.createElement('h2');
 let time=document.createElement('p');
@@ -30,6 +31,11 @@ let seeMoreBtn = document.createElement('button');
 let bookDetails = document.createElement('div');
 let bookAuthor = document.createElement('p');
 let bookDescription = document.createElement('p');
+
+let activityDiv = document.createElement('div');
+let activityHead = document.createElement('h2');
+let activityText = document.createElement('p');
+let fetchActivityBtn = document.createElement('button');
 
 let mainContent=document.createElement('div');
 let body=document.querySelector('body');
@@ -68,6 +74,10 @@ wodHead.setAttribute('id', 'wod-head');
 word.setAttribute('id', 'word');
 meaning.setAttribute('id', 'meaning');
 bookDiv.setAttribute('id', 'book-div');
+activityDiv.setAttribute('id', 'activity-div');
+activityHead.setAttribute('id', 'activity-head');
+activityText.setAttribute('id', 'activity-text');
+fetchActivityBtn.setAttribute('id', 'fetch-activity');
 
 Name.append(userName);
 Name.append(saveName);
@@ -88,35 +98,39 @@ bookDiv.append(seeMoreBtn);
 bookDetails.append(bookAuthor);
 bookDetails.append(bookDescription);
 bookDiv.append(bookDetails);
+activityDiv.append(activityHead);
+activityDiv.append(activityText);
+activityDiv.append(fetchActivityBtn);
 mainContent.append(catDiv);
 mainContent.append(JQ);
 mainContent.append(wod);
 mainContent.append(bookDiv);
+mainContent.append(activityDiv);
 body.append(h1);
 body.append(h2);
 body.append(time);
 body.append(Name);
 body.append(mainContent);
 
-function days(){
+async function days(){
     let weekdays=['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const today=new Date();
     const dayIndex=today.getDay();
     return weekdays[dayIndex]
 }
 
-function month(){
+async function month(){
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const today = new Date();
     const monthIndex = today.getMonth();
     return months[monthIndex];
 }
 
-function updateTime(){
+async function updateTime(){
     let now=new Date();
-    let Day=days();
+    let Day=await days().then((d)=>d);
     let Year=now.getFullYear();
-    let Month=month();
+    let Month=await month().then((m)=>m);
     let date=now.getDate();
     let Hours=now.getHours();
     let AmPm=Hours>=12?'PM':'AM';
@@ -127,7 +141,7 @@ function updateTime(){
     time.innerText=`${Day}, ${Month} ${date}, ${Year}, ${Hours+":"+Mins+":"+Secs} ${AmPm}`;
 }
 
-window.onload=()=>{
+window.onload=async()=>{
     updateTime();
     setInterval(updateTime, 1000);
     dayCat().then((cat)=>{
@@ -148,6 +162,8 @@ window.onload=()=>{
                     meaning.innerText = e.meanings?.[0]?.definitions?.[0]?.definition || "No meaning available";
                 });
     bookrecommendation();
+    
+    initBoredActivity();
 }
 
 saveName.addEventListener('click', ()=>{
@@ -188,9 +204,10 @@ async function quot() {
     return q;
 }
 
+//Word of the day
 async function wordOfDay() {
     try{
-        let randwordurl='https://random-word-api.herokuapp.com/word?number=1';
+        let randwordurl='https://random-word-api.herokuapp.com/word';
         let wordres=await axios.get(randwordurl);
         let randword=wordres.data[0];
 
@@ -276,5 +293,43 @@ async function bookrecommendation() {
     }
 }
 
+//Activity for bored people
+async function boredActivity() {
+    try {
+        const url = "https://bored-api.appbrewery.com/random";
+        const res = await axios.get(url);
+        return res.data.activity;
+    } catch (err) {
+        return "Could not fetch an activity 😕";
+    }
+}
 
 
+async function initBoredActivity() {
+    try {
+        activityHead.innerText = "Activity for Bored People";
+        activityText.innerText = "Loading activity...";
+        fetchActivityBtn.innerText = "Fetch Another Activity";
+
+        // initial fetch
+        activityText.innerText = await boredActivity();
+
+        // single click handler (no duplicates)
+        fetchActivityBtn.onclick = async () => {
+            try {
+                fetchActivityBtn.disabled = true;
+                activityText.innerText = "Loading activity...";
+                activityText.innerText = await boredActivity();
+            } catch {
+                activityText.innerText = "Couldn't fetch an activity 😕";
+            } finally {
+                fetchActivityBtn.disabled = false;
+            }
+        };
+
+    } catch {
+        activityHead.innerText = "Activity for Bored People";
+        activityText.innerText = "Couldn't fetch an activity 😕";
+        fetchActivityBtn.innerText = "Try Again";
+    }
+}
