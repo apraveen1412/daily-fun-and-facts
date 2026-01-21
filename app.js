@@ -1,3 +1,9 @@
+import {
+    generateActivityPool,
+    getRandomActivity
+} from './activitypool.js';
+generateActivityPool(1000); // ensure pool is generated
+
 //Creating elements using DOM
 let h1=document.createElement('h1');
 let h2=document.createElement('h2');
@@ -36,6 +42,10 @@ let activityDiv = document.createElement('div');
 let activityHead = document.createElement('h2');
 let activityText = document.createElement('p');
 let fetchActivityBtn = document.createElement('button');
+
+function createHR() {
+    return document.createElement('hr');
+}
 
 let mainContent=document.createElement('div');
 let body=document.querySelector('body');
@@ -82,16 +92,20 @@ fetchActivityBtn.setAttribute('id', 'fetch-activity');
 Name.append(userName);
 Name.append(saveName);
 catDiv.append(catHead);
+catDiv.append(createHR());
 catDiv.append(catImg);
 catDiv.append(catText);
 JQ.append(JQHead);
+JQ.append(createHR());
 JQ.append(jk);
 JQ.append(quote);
 wod.append(wodHead);
+wod.append(createHR());
 wod.append(word);
 wod.append(phonetic);
 wod.append(meaning);
 bookDiv.append(bookHead);
+bookDiv.append(createHR());
 bookDiv.append(bookTitle);
 bookDiv.append(bookImg);
 bookDiv.append(seeMoreBtn);
@@ -99,6 +113,7 @@ bookDetails.append(bookAuthor);
 bookDetails.append(bookDescription);
 bookDiv.append(bookDetails);
 activityDiv.append(activityHead);
+activityDiv.append(createHR());
 activityDiv.append(activityText);
 activityDiv.append(fetchActivityBtn);
 mainContent.append(catDiv);
@@ -163,7 +178,7 @@ window.onload=async()=>{
                 });
     bookrecommendation();
     
-    initBoredActivity();
+    boredActivity();
 }
 
 saveName.addEventListener('click', ()=>{
@@ -294,32 +309,22 @@ async function bookrecommendation() {
 }
 
 //Activity for bored people
-async function boredActivity() {
-    try {
-        const url = "https://bored-api.appbrewery.com/random";
-        const res = await axios.get(url);
-        return res.data.activity;
-    } catch (err) {
-        return "Could not fetch an activity 😕";
-    }
-}
 
-
-async function initBoredActivity() {
+function boredActivity() {
     try {
         activityHead.innerText = "Activity for Bored People";
         activityText.innerText = "Loading activity...";
         fetchActivityBtn.innerText = "Fetch Another Activity";
 
         // initial fetch
-        activityText.innerText = await boredActivity();
+        activityText.innerText = getRandomActivity();
 
         // single click handler (no duplicates)
         fetchActivityBtn.onclick = async () => {
             try {
                 fetchActivityBtn.disabled = true;
                 activityText.innerText = "Loading activity...";
-                activityText.innerText = await boredActivity();
+                activityText.innerText = getRandomActivity();
             } catch {
                 activityText.innerText = "Couldn't fetch an activity 😕";
             } finally {

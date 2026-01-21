@@ -81,6 +81,11 @@ body {
 }
 
 
+hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 0.75rem 0;
+}
 
 /* Content layout */
 #main-content {
@@ -93,7 +98,7 @@ body {
 }
 
 /* Cards */
-#catImgs, #jokes-quotes, #wod, #book-div {
+#catImgs, #jokes-quotes, #wod, #book-div, #activity-div {
     background-color: #fff;
     padding: 1rem;
     border-radius: 0.8rem;
@@ -102,10 +107,17 @@ body {
 }
 
 /* Section headings */
-#catImgs h2, #jokes-quotes h2, #wod h2, #book-div h2 {
+#catImgs h2, #jokes-quotes h2, #wod h2, #book-div h2, #activity-div h2 {
     font-size: 1.1rem;
     font-weight: bold;
     margin: 0 0 0.5rem 0;
+    text-align: center;
+}
+
+/* divs */
+#catImgs, #jokes-quotes, #wod, #book-div, #activity-div {
+    display: flex;
+    flex-direction: column;
 }
 
 /* Cat section */
@@ -129,11 +141,6 @@ body {
 }
 
 /* Book Section */
-#book-div {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-}
 #book-div img {
     width: 100%;
     max-height: 200px;
@@ -149,7 +156,6 @@ body {
     color: #fff;
     padding: 0.5rem 1rem;
     cursor: pointer;
-    transition: background 0.2s;
 }
 #book-div button:hover {
     background-color: #444;
@@ -163,11 +169,6 @@ body {
 }
 
 /* Activity Section */
-#activity-div {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-}
 #activity-div button {
     margin-top: 0.5rem;
     border: none;
@@ -176,5 +177,4 @@ body {
     color: #fff;
     padding: 0.5rem 1rem;
     cursor: pointer;
-    transition: background 0.2s;
 }
